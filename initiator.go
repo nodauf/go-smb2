@@ -75,7 +75,8 @@ func (i *NTLMInitiator) sessionKey() []byte {
 
 func (i *NTLMInitiator) infoMap() *ntlm.InfoMap {
 	return i.ntlm.Session().InfoMap()
-	
+}
+
 func (i *NTLMInitiator) TargetInfo() NTLMTargetInfo {
 	targetInfoMap := i.ntlm.Session().NTLMTargetInfoMap()
 
