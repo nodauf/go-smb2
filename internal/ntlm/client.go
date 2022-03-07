@@ -29,6 +29,8 @@ type Client struct {
 	session *Session
 }
 
+
+
 func (c *Client) Negotiate() (nmsg []byte, err error) {
 	//        NegotiateMessage
 	//   0-8: Signature
@@ -113,6 +115,8 @@ func (c *Client) Authenticate(cmsg []byte) (amsg []byte, err error) {
 	if info == nil {
 		return nil, errors.New("invalid target info format")
 	}
+
+
 
 	//        AuthenticateMessage
 	//   0-8: Signature
@@ -257,6 +261,9 @@ func (c *Client) Authenticate(cmsg []byte) (amsg []byte, err error) {
 		session.negotiateFlags = flags
 		session.infoMap = info.InfoMap
 
+		session.setTargetInfo(info)
+
+
 		h.Reset()
 		h.Write(ntChallengeResponse[:16])
 		sessionBaseKey := h.Sum(nil)
@@ -316,3 +323,4 @@ func (c *Client) Authenticate(cmsg []byte) (amsg []byte, err error) {
 func (c *Client) Session() *Session {
 	return c.session
 }
+

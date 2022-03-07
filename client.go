@@ -66,11 +66,8 @@ func (d *Dialer) DialContext(ctx context.Context, tcpConn net.Conn) (*Session, e
 	}
 
 	s, err := sessionSetup(conn, d.Initiator, ctx)
-	if err != nil {
-		return nil, err
-	}
 
-	return &Session{s: s, ctx: context.Background(), addr: tcpConn.RemoteAddr().String()}, nil
+	return &Session{s: s, ctx: context.Background(), addr: tcpConn.RemoteAddr().String()}, err
 }
 
 // Session represents a SMB session.
@@ -90,6 +87,11 @@ func (c *Session) WithContext(ctx context.Context) *Session {
 // Logoff invalidates the current SMB session.
 func (c *Session) Logoff() error {
 	return c.s.logoff(c.ctx)
+}
+
+// SigningRequired returns whehter the current connection requires signing
+func (c *Session) SigningRequired() bool {
+	return c.s.conn.requireSigning
 }
 
 // Mount mounts the SMB share.
