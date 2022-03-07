@@ -3,9 +3,11 @@ package ntlm
 import (
 	"bytes"
 	"crypto/rc4"
+	"encoding/binary"
 	"errors"
 
 	"github.com/nodauf/go-smb2/internal/utf16le"
+	"golang.org/x/sys/windows"
 )
 
 type Session struct {
@@ -166,10 +168,10 @@ func (s *Session) Unseal(dst, ciphertext []byte, seqNum uint32) ([]byte, uint32,
 func (s *Session) setTargetInfo(targetInfoEncoder *targetInfoEncoder) {
 	targetInfo := targetInfoEncoder.InfoMap
 	s.ntlmTargetInfoMap = map[string]string{
-		"ServerName":    utf16BytesToString(targetInfo[1]),
-		"DomainName":    utf16BytesToString(targetInfo[2]),
-		"DnsServerName": utf16BytesToString(targetInfo[3]),
-		"DnsDomainName": utf16BytesToString(targetInfo[4]),
+		"ServerName":    windows.UTF16ToString(binary.BigEndian.Uint16(targetInfo[1])),
+		"DomainName":    windows.UTF16ToString(binary.BigEndian.Uint16(targetInfo[2])),
+		"DnsServerName": windows.UTF16ToString(binary.BigEndian.Uint16(targetInfo[3])),
+		"DnsDomainName": windows.UTF16ToString(binary.BigEndian.Uint16(targetInfo[4])),
 	}
 }
 
