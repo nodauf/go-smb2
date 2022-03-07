@@ -14,7 +14,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/hirochachacha/go-smb2"
+	"github.com/nodauf/go-smb2"
 
 	"testing"
 )
